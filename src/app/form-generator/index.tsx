@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -11,29 +11,59 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea';
+import { generateForm } from '@/actions/generateForm';
+import { useFormState, useFormStatus } from 'react-dom';
+
+type Props = {}
+
+const initialState : {
+    message: string,
+    data?: any
+} = {
+    message: ''
+}
+
+export function SubmitButton() {
+    const {pending} = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? 'Generating...' : 'Generate'}
+        </Button>
+    )
+}
   
-const FormGenerator = () => {
+const FormGenerator = (props: Props) => {
+    const [state, formAction] = useFormState(generateForm, initialState);
+
     const [open, setOpen] = useState(false)
 
     const onFormCreate = () => {
         setOpen(true)
     }
 
+    useEffect(() => {
+        if (state.message === 'success') {
+            setOpen(false)
+        }
+        console.log(state.data)
+    }, [state.message, state])
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
         <Button onClick={onFormCreate}>Create Form</Button>
-        <DialogContent className='sm:max-w-[426px]'>
+        <DialogContent className='sm:max-w-[526px]'>
             <DialogHeader>
                 <DialogTitle>Create New Form</DialogTitle>
             </DialogHeader>
-            <form>
+            <form action={formAction}>
                 <div className='grid gap-4 py-4'>
                     <Textarea id='description' name='description' required placeholder='Tell Eidos what your form is about, its purpose, who your target audience are and what informations you would like to collect and let Eidos AI do the magic' />
                 </div>
-            </form>
             <DialogFooter> 
+                <SubmitButton />
                 <Button variant="link">Create Manually</Button>
             </DialogFooter>
+            </form>
         </DialogContent>
     </Dialog>
   )
