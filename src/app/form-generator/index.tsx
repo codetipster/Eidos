@@ -14,6 +14,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { generateForm } from '@/actions/generateForm';
 import { useFormState, useFormStatus } from 'react-dom';
 
+import  { useSession, signIn } from 'next-auth/react'
+
 type Props = {}
 
 const initialState : {
@@ -34,11 +36,17 @@ export function SubmitButton() {
   
 const FormGenerator = (props: Props) => {
     const [state, formAction] = useFormState(generateForm, initialState);
-
+    const session = useSession();
+    console.log(session)
     const [open, setOpen] = useState(false)
 
     const onFormCreate = () => {
-        setOpen(true)
+        if (session.data?.user ) {
+            setOpen(true)
+        }
+        else {
+            signIn()
+        }
     }
 
     useEffect(() => {
