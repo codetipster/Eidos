@@ -37,7 +37,7 @@ export function SubmitButton() {
 const FormGenerator = (props: Props) => {
     const [state, formAction] = useFormState(generateForm, initialState);
     const session = useSession();
-    console.log(session)
+    console.log('session',session)
     const [open, setOpen] = useState(false)
 
     const onFormCreate = () => {
