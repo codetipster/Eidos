@@ -19,7 +19,7 @@ function SignOut() {
 
 const Header = async (props: Props) => {
     const session = await auth();
-    console.log(session)
+    
   return (
     <header className='border bottom-1'>
         <nav className='bg-white border-gray-200 px-4 py-3 '>
