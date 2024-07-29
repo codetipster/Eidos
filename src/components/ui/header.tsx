@@ -27,7 +27,8 @@ const Header = async (props: Props) => {
                 <h1>Eidos</h1>
                 <div>
                     {session?.user? (
-                        <div className='flex items-center gap-4'>  
+                        <div className='flex items-center gap-4'>
+                            <Link href="/view-forms"><Button variant="outline">Dashboard</Button></Link> 
                             { session.user.image && session.user.name && <Image src={session.user.image} alt={session.user.name} width={32} height={32} className='rounded-full'/>}
                             <SignOut />
                         </div>
